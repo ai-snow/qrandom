@@ -44,3 +44,5 @@ class QRandom(object):
         
         for _, quantile in self.quantiles:
             quantile.prime()
+            
+        self.buffer = []
