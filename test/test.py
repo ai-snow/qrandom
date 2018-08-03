@@ -9,3 +9,4 @@ second = q.q_second
 first = q.q_first
 
 print(q.quantiles)
+print(q.buffer)
