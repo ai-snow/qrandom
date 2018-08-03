@@ -77,3 +77,36 @@ True
 True
 ```
 The state of process B was unchanged! Woot!
+
+The process is quite straight-forward.  You need to wrap your RNG in a QRandom object like so:
+```python
+q = QRandom(Random(), 1) # First parameter is RNG to use; second is the seed value
+```
+Then anywhere you want to generate a quantile (random number between 0 and 1, you write:
+```python
+x = q.q_x
+```
+Anytime you try to get an attribute on a QRandom object that begins with 'q_', it treats the rest of the name of the attribute as the name of the quantile you want to generate. Note that the variable name of the left of the assignment doesn't have to match the quantile name, it's just convenient to do so.
+```python
+dummy = q.q_x
+```
+Loops are a common mechanism in simulations.  The order in which quantiles are accessed multiple times (as in multiple passes through a loop) is also preserved
+```python
+for i in range(10):
+    x = q.q_x
+    y = q.q_y
+    print(x)
+    print(y)
+```
+The above will print 10 unique quantiles for both x and y (a total of 20 quantiles).  If you were to place `z = q.q_z` in between the assignments of x and y, you would be happy to know that the quantiles for x and y will not change (given, obviously, that you saved the state of the QRandom object and restored that state).
+```python
+q.reset() # in-memory equivalent to doing a save/restore set of operations (for testing, mainly)
+for i in range(10):
+    x = q.q_x
+    z = q.q_z
+    y = q.q_y
+    print(x)
+    print(z)
+    print(y)
+```
+Happy coding!
