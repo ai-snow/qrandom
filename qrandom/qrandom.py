@@ -25,16 +25,15 @@ class QRandom(object):
             if quantile_name not in self.quantiles:
                 self.quantiles[quantile_name] = Quantile(quantile_name)
             quantile = self.quantiles[quantile_name]
-            q = None
+
             if len(quantile.waiting):
                 index = quantile.waiting.pop()
-                q = self.__fill_buffer(index)
-                quantile.used.appendleft(index)
             else:
                 index = len(self.buffer)
-                q = self.__fill_buffer(index)
-                quantile.used.appendleft(index)
-                
+            
+            q = self.__fill_buffer(index)
+            quantile.used.appendleft(index)
+
             return q
         else:
             return super(QRandom, self).__getattribute__(attr)
