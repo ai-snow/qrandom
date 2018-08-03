@@ -1,7 +1,7 @@
 from collections import deque
 
 
-from quantile import Quantile
+from qrandom.quantile import Quantile
 
 
 class QRandom(object):
@@ -23,7 +23,7 @@ class QRandom(object):
         if attr.startswith('q_'):
             quantile_name = attr[2:]
             if quantile_name not in self.quantiles:
-                self.quantiles[quantile_name] = Quantile()
+                self.quantiles[quantile_name] = Quantile(quantile_name)
             quantile = self.quantiles[quantile_name]
             q = None
             if len(quantile.waiting):
@@ -40,9 +40,5 @@ class QRandom(object):
             return super(QRandom, self).__getattribute__(attr)
     
     def reset(self):
-        self.random.seed(self.seed)
-        
-        for _, quantile in self.quantiles:
+        for _, quantile in self.quantiles.items():
             quantile.prime()
-            
-        self.buffer = []

@@ -2,7 +2,7 @@ from random import Random
 
 from qrandom.qrandom import QRandom
 
-q = QRandom(Random())
+q = QRandom(Random(), 1)
 
 print('First run...')
 print(q.q_first)
