@@ -7,7 +7,7 @@ class Quantile(object):
         values = input.split('\t')
         quantile = Quantile(values[0])
         for val in values[1:]:
-            quantile.waiting.appendleft(float(val))
+            quantile.waiting.appendleft(int(val))
         return quantile
     
     def __init__(self, name):
@@ -19,3 +19,10 @@ class Quantile(object):
         self.waiting = self.used
         self.used = deque()
         
+    def serialize(self):
+        values = [self.name]
+        self.used.reverse()
+        for value in [str(q) for q in self.used]:
+            values.append(value)
+        self.used.reverse()
+        return '\t'.join(values)

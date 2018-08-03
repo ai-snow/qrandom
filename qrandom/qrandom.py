@@ -1,8 +1,26 @@
+
+
 from qrandom.quantile import Quantile
 
 
 class QRandom(object):
 
+    def restore(filename, random):
+        with open(filename, 'r') as f:
+            line_ct = 0
+            for line in f:
+                line_ct += 1
+                if line_ct == 1:
+                    qr = QRandom(random, int(line))
+                elif line_ct == 2:
+                    qr.__fill_buffer(int(line))
+                else:
+                    if line:
+                        q = Quantile.parse(line)
+                        qr.quantiles[q.name] = q
+        
+        return qr
+    
     def __init__(self, random, seed):
         self.random = random
         self.seed = seed
@@ -38,3 +56,10 @@ class QRandom(object):
     def reset(self):
         for _, quantile in self.quantiles.items():
             quantile.prime()
+
+    def save(self, filename):
+        with open(filename, 'w') as f:
+            f.write(str(self.seed) + '\n')
+            f.write(str(len(self.buffer)) + '\n')
+            for _, q in self.quantiles.items():
+                f.write(q.serialize() + '\n')
