@@ -109,4 +109,13 @@ for i in range(10):
     print(z)
     print(y)
 ```
+It is important to note that if you plan on using a quantile multiple times in the same equation, the following would be incorrect:
+```python
+something = q.q_x + (1 + q.q_x) ** 2
+```
+This equation would return different values for each call to q_x.  The appropriate way to correct this would be:
+```python
+x = q.q_x
+something = x + (1 + x) ** 2
+```
 Happy coding!
