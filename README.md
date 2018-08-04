@@ -57,16 +57,16 @@ from qrandom.qrandom import QRandom
 
 q = QRandom(Random(), 1) # First parameter is RNG to use; second is the seed value
 
-process_A_quantile_1 = q.q_process_A_quantile
-process_B_quantile_1 = q.q_process_B_quantile
+process_A_quantile_1 = q.q('process_A_quantile')
+process_B_quantile_1 = q.q('process_B_quantile')
 
 q.save('./tmp/rng.q')
 
 q = QRandom.restore('./tmp/rng.q')
 
-process_A_quantile_2 = q.q_process_A_quantile
-process_C_quantile_2 = q.q_process_C_quantile
-process_B_quantile_2 = q.q_process_B_quantile
+process_A_quantile_2 = q.q('process_A_quantile')
+process_C_quantile_2 = q.q('process_C_quantile')
+process_B_quantile_2 = q.q('process_B_quantile')
 
 print(process_A_quantile_1 == process_A_quantile_2)
 print(process_B_quantile_1 == process_B_quantile_2)
@@ -84,11 +84,11 @@ q = QRandom(Random(), 1) # First parameter is RNG to use; second is the seed val
 ```
 Then anywhere you want to generate a quantile (random number between 0 and 1, you write:
 ```python
-x = q.q_x
+x = q.q('x')
 ```
-Anytime you try to get an attribute on a QRandom object that begins with 'q_', it treats the rest of the name of the attribute as the name of the quantile you want to generate. Note that the variable name of the left of the assignment doesn't have to match the quantile name, it's just convenient to do so.
+where 'x' is an ID/name of the quantile you are asking for.  Moreover, anytime you try to get an attribute on a QRandom object that begins with 'q_', it treats the rest of the name of the attribute as the name of the quantile you want to generate. Note that the variable name of the left of the assignment doesn't have to match the quantile name, it's just convenient to do so.
 ```python
-dummy = q.q_x
+dummy = q.q_x  # this is equivalent to: dummy = q.q('x')
 ```
 Loops are a common mechanism in simulations.  The order in which quantiles are accessed multiple times (as in multiple passes through a loop) is also preserved
 ```python
