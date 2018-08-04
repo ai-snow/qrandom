@@ -53,7 +53,7 @@ qrandom works off a backend buffer and a collection of quantiles composed of a c
 Here's the same problem as the previous section, but implemented with qrandom's QRandom object:
 ```python
 from random import Random
-from qrandom.qrandom import QRandom
+from qrandom import QRandom
 
 q = QRandom(Random(), 1) # First parameter is RNG to use; second is the seed value
 
