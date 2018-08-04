@@ -1,5 +1,3 @@
-
-
 from qrandom.quantile import Quantile
 
 
@@ -37,22 +35,25 @@ class QRandom(object):
     def __getattribute__(self, attr):
         if attr.startswith('q_'):
             quantile_name = attr[2:]
-            if quantile_name not in self.quantiles:
-                self.quantiles[quantile_name] = Quantile(quantile_name)
-            quantile = self.quantiles[quantile_name]
-
-            if len(quantile.waiting):
-                index = quantile.waiting.pop()
-            else:
-                index = len(self.buffer)
-            
-            q = self.__fill_buffer(index)
-            quantile.used.appendleft(index)
-
-            return q
+            return self.q(quantile_name)
         else:
             return super(QRandom, self).__getattribute__(attr)
     
+    def q(self, quantile_name):
+        if quantile_name not in self.quantiles:
+                self.quantiles[quantile_name] = Quantile(quantile_name)
+        quantile = self.quantiles[quantile_name]
+
+        if len(quantile.waiting):
+            index = quantile.waiting.pop()
+        else:
+            index = len(self.buffer)
+        
+        q = self.__fill_buffer(index)
+        quantile.used.appendleft(index)
+
+        return q
+
     def reset(self):
         for _, quantile in self.quantiles.items():
             quantile.prime()
